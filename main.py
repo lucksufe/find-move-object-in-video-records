@@ -60,8 +60,8 @@ def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=
 
     end = time.time()
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), video_dir, f"cost {end - begin:.2f}s")
-    # with open(record_file, "w") as f:
-    #     f.write(video_dir + "\n")
+    with open(record_file, "a") as f:
+        f.write(video_dir + "\n")
 
 
 if __name__ == "__main__":
