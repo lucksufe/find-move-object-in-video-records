@@ -5,6 +5,14 @@ import shutil
 
 
 def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=128, object_size_threshold=5000, fps_gap=20):
+    begin = time.time()
+    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(begin)), video_dir)
+    record_file = "record"
+    if os.path.exists(record_file):
+        with open(record_file, "r") as f:
+            if video_dir in f.readlines():
+                return
+
     k_e = cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5))
     k_d = cv.getStructuringElement(cv.MORPH_ELLIPSE, (20, 20))
 
@@ -42,13 +50,18 @@ def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=
                             target = os.path.join(target_dir, dir_name)
                             os.makedirs(target, exist_ok=True)
                             shutil.copy2(os.path.join(root, f), target)
-                        cv.imwrite(f"{f}_{frame_num}.jpg", frame)
-                        cv.imwrite(f"{f}_diff.jpg", diff)
+                        # cv.imwrite(f"{f}_{frame_num}.jpg", frame)
+                        # cv.imwrite(f"{f}_diff.jpg", diff)
                         wanted = True
                         break
                 if wanted:
                     break
             video.release()
+
+    end = time.time()
+    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), video_dir, f"cost {end - begin:.2f}s")
+    # with open(record_file, "w") as f:
+    #     f.write(video_dir + "\n")
 
 
 if __name__ == "__main__":
