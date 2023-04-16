@@ -1,12 +1,15 @@
-import cv2 as cv
-import time
 import os
 import shutil
+import logging
+import cv2 as cv
+import time
+
+logging.basicConfig(filename="main.log", filemode="a", format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%M-%d %H:%M:%S", level=logging.DEBUG)
 
 
 def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=128, object_size_threshold=5000, fps_gap=20):
     begin = time.time()
-    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(begin)), video_dir)
+    logging.info(f"Start detecting {video_dir}")
     record_file = "record"
     if os.path.exists(record_file):
         with open(record_file, "r") as f:
@@ -59,12 +62,19 @@ def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=
             video.release()
 
     end = time.time()
-    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), video_dir, f"cost {end - begin:.2f}s")
+    logging.info(f"Finish detecting {video_dir} cost {end - begin:.2f}s")
     with open(record_file, "a") as f:
         f.write(video_dir + "\n")
 
 
 if __name__ == "__main__":
-    start = time.time()
-    find_video_with_move_object("fail")
-    print(time.time() - start)
+    import sys
+    from optparse import OptionParser
+
+    optParser = OptionParser()
+    optParser.add_option('-v', '--video_dir', type="string", dest='video_dir')
+    optParser.add_option("-t", "--target_dir", type="string", dest="target_dir")
+    opts, args = optParser.parse_args(sys.argv)
+    find_video_with_move_object(video_dir=opts.video_dir, target_dir=opts.target_dir)
+
+    # find_video_with_move_object("2023041300")
