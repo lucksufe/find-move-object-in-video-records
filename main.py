@@ -1,21 +1,20 @@
 import os
 import shutil
 import logging
-import cv2 as cv
 import time
+import cv2 as cv
 
-logging.basicConfig(filename="main.log", filemode="a", format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%M-%d %H:%M:%S", level=logging.DEBUG)
+logging.basicConfig(filename="main.log", filemode="a", format="%(asctime)s %(name)s:%(levelname)s:%(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
 
 def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=128, object_size_threshold=5000, fps_gap=20):
     begin = time.time()
-    logging.info(f"Start detecting {video_dir}")
     record_file = "record"
     if os.path.exists(record_file):
         with open(record_file, "r") as f:
-            if video_dir in f.readlines():
+            if f"{video_dir}\n" in f.readlines():
                 return
-
+    logging.info(f"Start detecting {video_dir}")
     k_e = cv.getStructuringElement(cv.MORPH_ELLIPSE, (5, 5))
     k_d = cv.getStructuringElement(cv.MORPH_ELLIPSE, (20, 20))
 
