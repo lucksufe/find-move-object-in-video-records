@@ -10,6 +10,7 @@ logging.basicConfig(filename="main.log", filemode="a", format="%(asctime)s %(nam
 def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=128, object_size_threshold=5000, fps_gap=20):
     begin = time.time()
     record_file = "record"
+    # cv.setNumThreads(1)
     if os.path.exists(record_file):
         with open(record_file, "r") as f:
             if f"{video_dir}\n" in f.readlines():
@@ -63,7 +64,7 @@ def find_video_with_move_object(video_dir, target_dir=None, sensitive_threshold=
     end = time.time()
     logging.info(f"Finish detecting {video_dir} cost {end - begin:.2f}s")
     with open(record_file, "a") as f:
-        f.write(video_dir + "\n")
+        f.write(f"{video_dir}\n")
 
 
 if __name__ == "__main__":
